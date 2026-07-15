@@ -1,5 +1,10 @@
 package pbotubesmcd.views;
 
-public class HomeAdminView {
+import java.awt.CardLayout;
 
+import javax.swing.JPanel;
+
+public class HomeAdminView extends JPanel {
+    public HomeAdminView(JPanel mainPanel, CardLayout cardLayout) {
+    }
 }
