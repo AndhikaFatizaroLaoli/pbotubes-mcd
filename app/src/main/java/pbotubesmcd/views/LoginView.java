@@ -26,7 +26,7 @@ import pbotubesmcd.utils.Session;
 import pbotubesmcd.utils.UITheme;
 
 public class LoginView extends JPanel {
-    private AuthController authController;
+    private final AuthController authController;
 
     JTextField txtUsername;
     JPasswordField txtPassword;

@@ -24,7 +24,11 @@ public class AuthController {
         Session.setCurrentUser(user);
     }
 
-    public void logout() {
+    public void logout() throws IllegalStateException {
+        if (Session.getCurrentUser() == null) {
+            throw new IllegalStateException("Session tidak aktif!");
+        }
+
         Session.logout();
     }
 }
