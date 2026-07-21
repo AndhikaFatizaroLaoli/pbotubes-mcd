@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import pbotubesmcd.components.DefaultButton;
+import pbotubesmcd.components.DefaultButtonRed;
 import pbotubesmcd.components.DefaultLabel;
 import pbotubesmcd.components.DefaultPasswordField;
 import pbotubesmcd.components.DefaultTextField;
@@ -51,7 +51,7 @@ public class LoginView extends JPanel {
         JLabel lblPassword = new DefaultLabel("Password:");
         txtPassword = new DefaultPasswordField(20);
 
-        JButton btnLogin = new DefaultButton("Login");
+        JButton btnLogin = new DefaultButtonRed("Login");
 
         gbc.insets = new Insets(10, 10, 40, 10);
 

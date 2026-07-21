@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import pbotubesmcd.components.DefaultButton;
+import pbotubesmcd.components.DefaultButtonRed;
 import pbotubesmcd.components.DefaultTable;
 import pbotubesmcd.components.DefaultTitle;
 import pbotubesmcd.utils.UITheme;
@@ -58,9 +58,9 @@ public abstract class AbstractManagementView extends JPanel {
         JPanel panelAksi = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelAksi.setBackground(Color.WHITE);
 
-        btnTambah = new DefaultButton("Tambah");
-        btnEdit = new DefaultButton("Edit");
-        btnHapus = new DefaultButton("Hapus");
+        btnTambah = new DefaultButtonRed("Tambah");
+        btnEdit = new DefaultButtonRed("Edit");
+        btnHapus = new DefaultButtonRed("Hapus");
 
         btnHapus.setBackground(Color.DARK_GRAY);
 

@@ -9,4 +9,7 @@ public class Router {
     public static String CATEGORIES = "categories";
     public static String MENUS = "menus";
     public static String ORDERS = "orders";
+    public static String MAIN_ORDER = "main_order";
+    public static String CART = "cart";
+    public static String PAYMENT = "payment";
 }

@@ -7,8 +7,8 @@ import javax.swing.border.EmptyBorder;
 
 import pbotubesmcd.utils.UITheme;
 
-public class DefaultButton extends JButton {
-    public DefaultButton(String text) {
+public class DefaultButtonRed extends JButton {
+    public DefaultButtonRed(String text) {
         super(text);
 
         setFont(UITheme.FONT_BUTTON);

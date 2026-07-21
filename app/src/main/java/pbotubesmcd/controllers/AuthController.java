@@ -31,4 +31,8 @@ public class AuthController {
 
         Session.logout();
     }
+
+    public User getCurrentUser() {
+        return Session.getCurrentUser();
+    }
 }

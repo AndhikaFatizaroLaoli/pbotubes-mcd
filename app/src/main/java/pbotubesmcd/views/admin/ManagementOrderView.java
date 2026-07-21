@@ -16,7 +16,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import pbotubesmcd.components.DefaultButton;
+import pbotubesmcd.components.DefaultButtonRed;
 import pbotubesmcd.controllers.OrderController;
 import pbotubesmcd.controllers.OrderDetailController;
 import pbotubesmcd.enums.OrderStatus;
@@ -145,7 +145,7 @@ public class ManagementOrderView extends AbstractManagementView {
 
     @Override
     protected void addExtraButtons(JPanel panelAksi) {
-        JButton btnDetail = new DefaultButton("Detail");
+        JButton btnDetail = new DefaultButtonRed("Detail");
         panelAksi.add(btnDetail);
 
         panelAksi.add(btnDetail, 0);
