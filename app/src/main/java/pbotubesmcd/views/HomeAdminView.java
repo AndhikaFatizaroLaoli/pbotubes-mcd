@@ -24,6 +24,9 @@ import pbotubesmcd.components.DefaultTitle;
 import pbotubesmcd.controllers.AuthController;
 import pbotubesmcd.utils.Router;
 import pbotubesmcd.utils.UITheme;
+import pbotubesmcd.views.admin.ManagementCategoriesView;
+import pbotubesmcd.views.admin.ManagementMenuView;
+import pbotubesmcd.views.admin.ManagementOrderView;
 import pbotubesmcd.views.admin.ManagementUserView;
 
 public class HomeAdminView extends JPanel {
@@ -34,6 +37,13 @@ public class HomeAdminView extends JPanel {
 
     private final CardLayout cardLayout;
     private CardLayout contentCardLayout;
+
+    JButton btnDashboard;
+    JButton btnKelolaPesanan;
+    JButton btnKelolaMenu;
+    JButton btnKelolaCategory;
+    JButton btnKelolaUser;
+    JButton btnLogout;
 
     public HomeAdminView(JPanel mainPanel, CardLayout cardLayout) {
         this.addComponentListener(new ComponentAdapter() {
@@ -72,11 +82,7 @@ public class HomeAdminView extends JPanel {
         lblTitle.setForeground(Color.WHITE);
         lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton btnDashboard = createSidebarButton("Dashboard");
-        JButton btnKelolaPesanan = createSidebarButton("Pesanan");
-        JButton btnKelolaMenu = createSidebarButton("Menu");
-        JButton btnKelolaUser = createSidebarButton("Pengguna");
-        JButton btnLogout = createSidebarButton("Logout");
+        initButtonNav();
 
         sidebarPanel.add(lblTitle);
         sidebarPanel.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -86,6 +92,8 @@ public class HomeAdminView extends JPanel {
         sidebarPanel.add(btnKelolaPesanan);
         sidebarPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         sidebarPanel.add(btnKelolaMenu);
+        sidebarPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        sidebarPanel.add(btnKelolaCategory);
         sidebarPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         sidebarPanel.add(btnKelolaUser);
         sidebarPanel.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -102,19 +110,48 @@ public class HomeAdminView extends JPanel {
         dashboardPanel.add(lblWelcome);
 
         ManagementUserView meneUserView = new ManagementUserView();
+        ManagementCategoriesView meneCategoriesView = new ManagementCategoriesView();
+        ManagementMenuView meneMenuView = new ManagementMenuView();
+        ManagementOrderView meneOrderView = new ManagementOrderView();
 
         contentArea.add(dashboardPanel, Router.DASHBOARD);
         contentArea.add(meneUserView, Router.KELOLA_USER);
+        contentArea.add(meneCategoriesView, Router.CATEGORIES);
+        contentArea.add(meneMenuView, Router.MENUS);
+        contentArea.add(meneOrderView, Router.ORDERS);
 
         add(sidebarPanel, BorderLayout.WEST);
         add(contentArea, BorderLayout.CENTER);
 
+        actionListener();
+    }
+
+    private void initButtonNav() {
+        btnDashboard = createSidebarButton("Dashboard");
+        btnKelolaPesanan = createSidebarButton("Pesanan");
+        btnKelolaMenu = createSidebarButton("Menu");
+        btnKelolaCategory = createSidebarButton("Kategori");
+        btnKelolaUser = createSidebarButton("Pengguna");
+        btnLogout = createSidebarButton("Logout");
+    }
+
+    private void actionListener() {
         btnDashboard.addActionListener(e -> {
             contentCardLayout.show(contentArea, Router.DASHBOARD);
         });
 
         btnKelolaUser.addActionListener(e -> {
             contentCardLayout.show(contentArea, Router.KELOLA_USER);
+        });
+
+        btnKelolaCategory.addActionListener(e -> {
+            contentCardLayout.show(contentArea, Router.CATEGORIES);
+        });
+        btnKelolaMenu.addActionListener(e -> {
+            contentCardLayout.show(contentArea, Router.MENUS);
+        });
+        btnKelolaPesanan.addActionListener(e -> {
+            contentCardLayout.show(contentArea, Router.ORDERS);
         });
 
         btnLogout.addActionListener(e -> {

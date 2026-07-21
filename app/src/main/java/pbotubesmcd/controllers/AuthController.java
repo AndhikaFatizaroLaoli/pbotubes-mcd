@@ -2,7 +2,7 @@ package pbotubesmcd.controllers;
 
 import pbotubesmcd.exceptions.InvalidCredentialsException;
 import pbotubesmcd.models.User;
-import pbotubesmcd.repositories.UserRepository;
+import pbotubesmcd.repositories.AuthRepository;
 import pbotubesmcd.utils.Session;
 
 public class AuthController {
@@ -15,7 +15,7 @@ public class AuthController {
             throw new IllegalArgumentException("Password tidak boleh kosong!");
         }
 
-        User user = UserRepository.login(username, password);
+        User user = AuthRepository.login(username, password);
 
         if (user == null) {
             throw new InvalidCredentialsException("Username atau password salah!");

@@ -2,6 +2,8 @@ package pbotubesmcd.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -9,6 +11,7 @@ import jakarta.persistence.Table;
 @Table(name = "categories")
 public class Categories {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_category;
 
     @Column(nullable = false)
@@ -28,5 +31,10 @@ public class Categories {
 
     public String getNamaKategori() {
         return nama_kategori;
+    }
+
+    @Override
+    public String toString() {
+        return this.nama_kategori;
     }
 }

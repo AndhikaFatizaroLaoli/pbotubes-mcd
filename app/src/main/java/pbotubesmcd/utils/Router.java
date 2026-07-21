@@ -6,4 +6,7 @@ public class Router {
     public static String HOME_CUSTOMER = "home_customer";
     public static String KELOLA_USER = "kelola_user";
     public static String DASHBOARD = "dashboard";
+    public static String CATEGORIES = "categories";
+    public static String MENUS = "menus";
+    public static String ORDERS = "orders";
 }
