@@ -19,7 +19,7 @@ public class App extends JFrame {
 
     public App() {
         setTitle("McDonald's Self Order");
-        setSize(650, 1080);
+        setSize(700, 1080);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setBackground(Color.green);
