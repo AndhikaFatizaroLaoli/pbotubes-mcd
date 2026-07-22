@@ -228,10 +228,13 @@ public class OrderMainView extends JPanel {
 
         JLabel lblNama = new DefaultLabel(menu.getNamaMenu());
         lblNama.setHorizontalAlignment(SwingConstants.LEFT);
+        JLabel lblHarga = new DefaultLabel("Rp " + menu.getHarga().toString());
+        lblHarga.setHorizontalAlignment(SwingConstants.RIGHT);
 
         JPanel nameWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
         nameWrapper.setOpaque(false);
         nameWrapper.add(lblNama);
+        nameWrapper.add(lblHarga);
         cardPanel.add(nameWrapper, BorderLayout.CENTER);
 
         JButton btnAddToCart = new DefaultButtonYellow("Tambah");

@@ -1,6 +1,8 @@
 package pbotubesmcd.views.admin;
 
 import java.awt.BorderLayout;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.math.BigDecimal;
@@ -86,8 +88,8 @@ public class ManagementMenuView extends AbstractManagementView {
         panelGambar.add(btnBrowse, BorderLayout.EAST);
 
         btnBrowse.addActionListener(e -> {
-            java.awt.FileDialog fileDialog = new java.awt.FileDialog((java.awt.Frame) null, "Pilih Gambar Menu",
-                    java.awt.FileDialog.LOAD);
+            FileDialog fileDialog = new FileDialog((Frame) null, "Pilih Gambar Menu",
+                    FileDialog.LOAD);
 
             fileDialog.setFile("*.png;*.jpg;*.jpeg");
 
