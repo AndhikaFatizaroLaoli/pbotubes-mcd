@@ -71,6 +71,13 @@ public abstract class AbstractManagementView extends JPanel {
         addExtraButtons(panelAksi);
 
         add(panelAksi, BorderLayout.SOUTH);
+
+        this.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentShown(java.awt.event.ComponentEvent e) {
+                loadData(); 
+            }
+        });
     }
 
     private void setupBaseActionListeners() {
