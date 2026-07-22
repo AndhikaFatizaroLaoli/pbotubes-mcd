@@ -1,142 +1,118 @@
 package pbotubesmcd.views;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
-import pbotubesmcd.database.Database;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+import pbotubesmcd.components.DefaultButtonRed;
+import pbotubesmcd.components.DefaultLabel;
+import pbotubesmcd.components.DefaultPasswordField;
+import pbotubesmcd.components.DefaultTextField;
+import pbotubesmcd.components.DefaultTitle;
+import pbotubesmcd.controllers.AuthController;
 import pbotubesmcd.enums.UserRole;
+import pbotubesmcd.exceptions.InvalidCredentialsException;
+import pbotubesmcd.utils.Router;
+import pbotubesmcd.utils.Session;
+import pbotubesmcd.utils.UITheme;
 
-public class LoginView {
-    private JFrame frame;
-    private JTextField txtUsername;
-    private JPasswordField txtPassword;
-    private JButton btnLogin;
+public class LoginView extends JPanel {
+    private final AuthController authController;
 
-    public LoginView() {
-        initializeUI();
+    JTextField txtUsername;
+    JPasswordField txtPassword;
+
+    public LoginView(JPanel mainPanel, CardLayout cardLayout) {
+        this.authController = new AuthController();
+
+        initializeUI(mainPanel, cardLayout);
     }
 
-    private void initializeUI() {
-        // Create the main window frame
-        frame = new JFrame("McDonald's App - Login");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(350, 220);
-        frame.setLocationRelativeTo(null); // Center on screen
-        frame.setResizable(false);
-
-        // Layout setup
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
+    private void initializeUI(JPanel mainPanel, CardLayout cardLayout) {
+        setBackground(UITheme.COLOR_BG_LIGHT);
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Title/Header
-        JLabel lblTitle = new JLabel("Welcome back!", SwingConstants.CENTER);
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 16));
+        JLabel titleLabel = new DefaultTitle("McDonald's App - Login");
+
+        JLabel lblUsername = new DefaultLabel("Username:");
+        txtUsername = new DefaultTextField(20);
+
+        JLabel lblPassword = new DefaultLabel("Password:");
+        txtPassword = new DefaultPasswordField(20);
+
+        JButton btnLogin = new DefaultButtonRed("Login");
+
+        gbc.insets = new Insets(10, 10, 40, 10);
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        panel.add(lblTitle, gbc);
+        add(titleLabel, gbc);
 
-        // Username Label and Text Field
-        gbc.gridwidth = 1;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
         gbc.gridy = 1;
-        gbc.gridx = 0;
-        panel.add(new JLabel("Username:"), gbc);
+        gbc.gridwidth = 1;
+        add(lblUsername, gbc);
 
         gbc.gridx = 1;
-        txtUsername = new JTextField(15);
-        panel.add(txtUsername, gbc);
+        add(txtUsername, gbc);
 
-        // Password Label and Field
+        gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.gridx = 0;
-        panel.add(new JLabel("Password:"), gbc);
+        add(lblPassword, gbc);
 
         gbc.gridx = 1;
-        txtPassword = new JPasswordField(15);
-        panel.add(txtPassword, gbc);
+        add(txtPassword, gbc);
 
-        // Login Button
-        gbc.gridy = 3;
         gbc.gridx = 0;
+        gbc.gridy = 3;
         gbc.gridwidth = 2;
-        btnLogin = new JButton("Login");
-        panel.add(btnLogin, gbc);
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(btnLogin, gbc);
 
-        frame.add(panel);
+        handleLoginButton(btnLogin, mainPanel, cardLayout);
+    }
 
-        // Add action listener to the login button
-        btnLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleLogin();
+    private void handleLoginButton(JButton btnLogin, JPanel mainPanel, CardLayout cardLayout) {
+        btnLogin.addActionListener((ActionEvent e) -> {
+            String username = txtUsername.getText();
+            String password = new String(txtPassword.getPassword());
+
+            try {
+                authController.login(username, password);
+
+                txtUsername.setText("");
+                txtPassword.setText("");
+
+                UserRole role = Session.getCurrentUser().getRole();
+
+                switch (role) {
+                    case ADMIN -> cardLayout.show(mainPanel, Router.HOME_ADMIN);
+                    case CUSTOMER -> cardLayout.show(mainPanel, Router.HOME_CUSTOMER);
+                    default -> JOptionPane.showMessageDialog(LoginView.this, "Role tidak dikenal");
+                }
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(LoginView.this, ex.getMessage(), "Input Tidak Valid",
+                        JOptionPane.WARNING_MESSAGE);
+            } catch (InvalidCredentialsException ex) {
+                JOptionPane.showMessageDialog(LoginView.this, ex.getMessage(), "Login Gagal",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(LoginView.this, "Terjadi kesalahan: " + ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
-    }
-
-    public void run() {
-        // Display the window
-        SwingUtilities.invokeLater(() -> frame.setVisible(true));
-    }
-
-    private void handleLogin() {
-        String username = txtUsername.getText().trim();
-        String password = new String(txtPassword.getPassword()).trim();
-
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Please enter both username and password.", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        // Database verification
-        try (Connection conn = Database.connect()) {
-            if (conn == null) {
-                JOptionPane.showMessageDialog(frame, "Database connection error.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Adjust table and column names to match your schema if necessary
-            String sql = "SELECT role FROM users WHERE username = ? AND password = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, username);
-                pstmt.setString(2, password);
-
-                try (ResultSet rs = pstmt.executeQuery()) {
-                    if (rs.next()) {
-                        String roleStr = rs.getString("role");
-                        UserRole role = UserRole.valueOf(roleStr.toUpperCase());
-
-                        JOptionPane.showMessageDialog(frame, "Login Successful! Role: " + role, "Success", JOptionPane.INFORMATION_MESSAGE);
-                        
-                        // Close login screen
-                        frame.dispose();
-
-                        // Redirect based on role
-                        if (role == UserRole.ADMIN) {
-                            System.out.println("Opening Admin Panel...");
-                            // new AdminView().run(); (Instantiate your admin dashboard here)
-                        } else if (role == UserRole.CUSTOMER) {
-                            System.out.println("Opening Customer Dashboard...");
-                            // new CustomerView().run(); (Instantiate your customer dashboard here)
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Invalid username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(frame, "SQL Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        } catch (IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(frame, "Invalid role found in database.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
     }
 }

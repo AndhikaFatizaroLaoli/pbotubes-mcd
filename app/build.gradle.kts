@@ -24,6 +24,7 @@ dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
     implementation("org.postgresql:postgresql:42.7.3")
+    implementation("org.hibernate.orm:hibernate-core:6.4.4.Final")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

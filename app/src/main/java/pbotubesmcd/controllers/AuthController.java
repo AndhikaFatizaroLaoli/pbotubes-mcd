@@ -1,28 +1,38 @@
 package pbotubesmcd.controllers;
 
-import pbotubesmcd.enums.UserRole;
+import pbotubesmcd.exceptions.InvalidCredentialsException;
 import pbotubesmcd.models.User;
-import pbotubesmcd.repositories.UserRepository;
+import pbotubesmcd.repositories.AuthRepository;
 import pbotubesmcd.utils.Session;
 
 public class AuthController {
-    public boolean login(String username, String password) {
-        User user = UserRepository.login(username, password);
-
-        if (user != null) {
-            Session.setCurrentUser(user);
-
-            if (user.getRole().equals(UserRole.ADMIN)) {
-                // navigasi ke HomeAdminView.java
-            } else {
-                // navigasi ke HomeCustomerView.java
-            }
-
-            return true;
-        } else {
-            return false;
-            // nanti di LoginView nya tampilin pesan error mau text ataupun pop up bebas,
-            // tampilin username atau password salah
+    public void login(String username, String password) throws InvalidCredentialsException, IllegalArgumentException {
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username tidak boleh kosong!");
         }
+
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password tidak boleh kosong!");
+        }
+
+        User user = AuthRepository.login(username, password);
+
+        if (user == null) {
+            throw new InvalidCredentialsException("Username atau password salah!");
+        }
+
+        Session.setCurrentUser(user);
+    }
+
+    public void logout() throws IllegalStateException {
+        if (Session.getCurrentUser() == null) {
+            throw new IllegalStateException("Session tidak aktif!");
+        }
+
+        Session.logout();
+    }
+
+    public User getCurrentUser() {
+        return Session.getCurrentUser();
     }
 }
